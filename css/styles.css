@@ -209,8 +209,7 @@ h1 {
   margin: 0;
 }
 
-.split article p,
-.services p {
+.split article p {
   margin: 18px 0 0;
 }
 
@@ -258,18 +257,6 @@ h1 {
   text-transform: uppercase;
 }
 
-.service-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px 28px;
-  margin: 26px 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: 16px;
-  letter-spacing: 0.4px;
-}
-
 .zoom {
   display: block;
   width: 100%;
@@ -280,10 +267,31 @@ h1 {
 }
 
 .services {
-  margin-top: 56px;
+  margin-top: 64px;
+  text-align: center;
+  color: var(--cream);
 }
 
-.services h2,
+.services h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.services p {
+  margin: 16px 0 0;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.45;
+}
+
+.services .service-more {
+  margin-top: 8px;
+  color: rgba(224, 216, 202, 0.62);
+  font-size: 17px;
+}
+
 .contact h2,
 .closing h2 {
   font-size: 26px;
