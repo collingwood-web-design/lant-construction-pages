@@ -227,8 +227,7 @@ h1 {
   object-position: center;
 }
 
-.projects img,
-.slider-frame img {
+.projects img {
   width: 100%;
   cursor: zoom-in;
 }
@@ -321,44 +320,59 @@ h1 {
 
 .slider-frame {
   position: relative;
-  height: min(70svh, 640px);
-  overflow: hidden;
-  background: #111;
+  display: grid;
+  place-items: center;
+  background: var(--sand);
 }
 
 .slider-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  grid-area: 1 / 1;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(70svh, 640px);
+  object-fit: contain;
   object-position: center;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+}
+
+.slider-frame img.is-current {
+  opacity: 1;
+  z-index: 1;
+  pointer-events: auto;
   cursor: zoom-in;
 }
 
-.slider-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+.slider-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 22px 16px 0;
+}
+
+.slider-dots button {
+  width: 11px;
+  height: 11px;
+  padding: 0;
   border: 0;
-  background: transparent;
+  border-radius: 50%;
+  background: rgba(22, 37, 40, 0.28);
   cursor: pointer;
 }
 
-.slider-btn.prev { left: 8px; }
-.slider-btn.next { right: 8px; }
-
-.slider-btn span {
-  display: block;
-  width: 16px;
-  height: 16px;
-  margin: auto;
-  border-top: 3px solid rgba(255, 255, 255, 0.85);
-  border-left: 3px solid rgba(255, 255, 255, 0.85);
+.slider-dots button[aria-current="true"] {
+  background: var(--ink);
 }
 
-.slider-btn.prev span { transform: rotate(-45deg); }
-.slider-btn.next span { transform: rotate(135deg); }
+.slider-dots button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
 
 .quotes-wrap {
   padding-top: 36px;
@@ -707,4 +721,6 @@ h1 {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+
+  .slider-frame img { transition: none; }
 }

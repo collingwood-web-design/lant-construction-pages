@@ -17,13 +17,64 @@
     return "https://media.cwd-cdn.com/lant-construction/images/" + name;
   });
 
-  var frame = document.querySelector("[data-slider] img");
+  var frame = document.querySelector("[data-slider] .slider-frame");
+  var photos = frame.querySelectorAll("img");
+  var currentImg = photos[0];
+  var bufferImg = photos[1];
+  var dots = document.querySelector("[data-slider-dots]");
   var index = 0;
   var timer;
+  var token = 0;
+
+  slides.forEach(function (_, i) {
+    var dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", "Photo " + (i + 1));
+    dot.addEventListener("click", function () {
+      show(i);
+      start();
+    });
+    dots.appendChild(dot);
+  });
+
+  function updateDots() {
+    dots.querySelectorAll("button").forEach(function (dot, i) {
+      if (i === index) dot.setAttribute("aria-current", "true");
+      else dot.removeAttribute("aria-current");
+    });
+  }
 
   function show(next) {
-    index = (next + slides.length) % slides.length;
-    frame.src = slides[index];
+    next = (next + slides.length) % slides.length;
+    if (next === index) return;
+    var ticket = ++token;
+    var revealed = false;
+
+    function reveal() {
+      if (revealed || ticket !== token) return;
+      revealed = true;
+      bufferImg.classList.add("is-current");
+      bufferImg.alt = "Lant Construction project photo";
+      bufferImg.removeAttribute("aria-hidden");
+      currentImg.classList.remove("is-current");
+      currentImg.alt = "";
+      currentImg.setAttribute("aria-hidden", "true");
+      var swap = currentImg;
+      currentImg = bufferImg;
+      bufferImg = swap;
+      index = next;
+      updateDots();
+    }
+
+    bufferImg.onload = function () {
+      bufferImg.onload = null;
+      reveal();
+    };
+    bufferImg.src = slides[next];
+    if (bufferImg.complete && bufferImg.naturalWidth) {
+      bufferImg.onload = null;
+      reveal();
+    }
   }
 
   function start() {
@@ -36,18 +87,11 @@
     window.clearInterval(timer);
   }
 
-  document.querySelector(".slider-btn.next").addEventListener("click", function () {
-    show(index + 1);
-    start();
-  });
+  updateDots();
 
-  document.querySelector(".slider-btn.prev").addEventListener("click", function () {
-    show(index - 1);
-    start();
-  });
-
-  frame.addEventListener("click", function () {
-    openLightbox(frame.src, frame.alt);
+  frame.addEventListener("click", function (event) {
+    if (!event.target.classList.contains("is-current")) return;
+    openLightbox(currentImg.src, currentImg.alt);
   });
 
   start();
